@@ -407,9 +407,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;b
         <div class="home-phil">"La idea no es eliminar el celular de tu vida — es darle un lugar y un momento."</div>
       </div>
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-icon">🌙</div><div class="stat-val">7.2</div><div class="stat-lbl">horas</div></div>
-        <div class="stat-card"><div class="stat-icon">💤</div><div class="stat-val">84</div><div class="stat-lbl">calidad</div></div>
-        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-val" id="home-streak">5</div><div class="stat-lbl">racha</div></div>
+        <div class="stat-card"><div class="stat-icon">🌙</div><div class="stat-val" id="stat-hours">—</div><div class="stat-lbl">horas</div></div>
+        <div class="stat-card"><div class="stat-icon">💤</div><div class="stat-val" id="stat-score">—</div><div class="stat-lbl">calidad</div></div>
+        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-val" id="home-streak">0</div><div class="stat-lbl">racha</div></div>
       </div>
       <div class="home-chart">
         <div class="chart-box">
@@ -485,9 +485,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;b
       </div>
       <div class="streak-sec">
         <div class="streak-top">
-          <div class="streak-num" id="h-streak">5</div>
+          <div class="streak-num" id="h-streak">0</div>
           <div><div style="font-size:13px;font-weight:500">días seguidos</div><div style="font-size:11px;color:var(--text-soft)">con tu ritual</div></div>
-          <div class="streak-badge" id="h-badge">🔥 En racha</div>
+          <div class="streak-badge" id="h-badge">🌱 Empezando</div>
         </div>
         <div class="cal">
           <div class="cal-hdr"><div class="cal-m" id="cal-m"></div><div class="cal-nav"><button onclick="changeCalMonth(-1)">‹</button><button onclick="changeCalMonth(1)">›</button></div></div>
@@ -536,13 +536,13 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;b
     <!-- PROFILE -->
     <div class="page" id="p-profile">
       <div class="prof-hero">
-        <div class="av-ring"><div class="av-inner" id="av-init">M</div><div class="av-edit">✎</div></div>
-        <div class="prof-name" id="prof-name" contenteditable="false" onclick="editName()">Martín</div>
-        <div class="prof-since">Con Hábitos desde mayo 2026</div>
+        <div class="av-ring"><div class="av-inner" id="av-init">H</div><div class="av-edit">✎</div></div>
+        <div class="prof-name" id="prof-name" contenteditable="false" onclick="editName()" id="prof-name-disp">—</div>
+        <div class="prof-since">Con Hábitos desde hoy</div>
         <div class="prof-stats">
-          <div class="pstat"><div class="pstat-val">31</div><div class="pstat-lbl">noches</div></div>
-          <div class="pstat"><div class="pstat-val">84</div><div class="pstat-lbl">prom.</div></div>
-          <div class="pstat"><div class="pstat-val">18</div><div class="pstat-lbl">racha máx.</div></div>
+          <div class="pstat"><div class="pstat-val">0</div><div class="pstat-lbl">noches</div></div>
+          <div class="pstat"><div class="pstat-val">—</div><div class="pstat-lbl">prom.</div></div>
+          <div class="pstat"><div class="pstat-val">0</div><div class="pstat-lbl">racha máx.</div></div>
         </div>
       </div>
       <div style="padding:0 20px;display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
@@ -555,12 +555,12 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;b
         <div class="setting-card">
           <div class="setting-row"><div class="s-icon">📳</div><div class="s-name">Vibración</div><select class="s-sel"><option>Suave</option><option selected>Media</option><option>Fuerte</option></select></div>
           <div class="setting-row"><div class="s-icon">🌅</div><div class="s-name">Despertar inteligente</div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-          <div class="setting-row"><div class="s-icon">🔋</div><div><div class="s-name">Batería</div><div class="s-desc">Última sync: hoy 08:14</div></div><span class="s-val" style="color:#4CAF7D">87%</span></div>
+          <div class="setting-row"><div class="s-icon">🔋</div><div><div class="s-name">Batería</div><div class="s-desc">Última sync: hoy 08:14</div></div><span class="s-val" style="color:var(--text-dim)">—</span></div>
         </div>
         <div class="s-title" style="font-size:14px">Mis productos Hábitos</div>
         <div class="setting-card">
-          <div class="prod-row"><div class="prod-dot" style="background:#E8A94A"></div><div class="prod-name">Pulsera Hábitos</div><div class="prod-status" style="background:rgba(76,175,125,0.15);color:#4CAF7D">Conectada</div></div>
-          <div class="prod-row"><div class="prod-dot" style="background:#E8A94A"></div><div class="prod-name">Luz de lectura Hábitos</div><div class="prod-status" style="background:rgba(76,175,125,0.15);color:#4CAF7D">Activa</div></div>
+          <div class="prod-row"><div class="prod-dot" style="background:var(--text-dim)"></div><div class="prod-name">Pulsera Hábitos</div><div class="prod-status" style="background:var(--card2);color:var(--text-dim)">No registrada</div></div>
+          <div class="prod-row"><div class="prod-dot" style="background:var(--text-dim)"></div><div class="prod-name">Luz de lectura Hábitos</div><div class="prod-status" style="background:var(--card2);color:var(--text-dim)">No registrada</div></div>
           <div class="prod-row" style="border-bottom:none"><div class="prod-dot" style="background:var(--text-dim)"></div><div class="prod-name">Estación nocturna Hábitos</div><div class="prod-status" style="background:var(--card2);color:var(--text-dim)">No registrada</div></div>
         </div>
         <div class="s-title" style="font-size:14px">Cuenta</div>
@@ -710,14 +710,14 @@ function setPreset(m,el){document.getElementById('nap-sl').value=m;updateNap(m);
 function initNap(){
   const r=document.getElementById('nap-rec');
   r.style.cssText='background:rgba(76,175,125,0.08);border-color:rgba(76,175,125,0.25)';
-  r.innerHTML=`<div style="font-size:13px;font-weight:500;color:#4CAF7D;margin-bottom:5px">✅ Tu sueño fue bueno — siesta corta ideal</div><div style="font-size:12px;color:var(--text-soft);line-height:1.5">Dormiste bien anoche (7.2h, puntaje 84). Una siesta de 20 min te dará energía sin afectar esta noche.</div><a href="https://www.sleepfoundation.org/how-sleep-works/does-napping-impact-sleep-at-night" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--text-dim);margin-top:7px;text-decoration:none;border:1px solid var(--border-soft);border-radius:20px;padding:2px 7px;background:var(--card2)"><span style="width:4px;height:4px;border-radius:50%;background:#4CAF7D;display:inline-block"></span>Sleep Foundation ↗</a>`;
+  r.innerHTML=`<div style="font-size:13px;font-weight:500;color:#4CAF7D;margin-bottom:5px">🌙 Sin datos aún</div><div style="font-size:12px;color:var(--text-soft);line-height:1.5">Completá tu primera noche con Hábitos para recibir recomendaciones personalizadas.</div><a href="https://www.sleepfoundation.org/how-sleep-works/does-napping-impact-sleep-at-night" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--text-dim);margin-top:7px;text-decoration:none;border:1px solid var(--border-soft);border-radius:20px;padding:2px 7px;background:var(--card2)"><span style="width:4px;height:4px;border-radius:50%;background:#4CAF7D;display:inline-block"></span>Sleep Foundation ↗</a>`;
   updateNap(20);
 }
 
 // CALENDAR
 let calMonth=today.getMonth(),calYear=today.getFullYear();
 const doneDays=new Set();
-for(let i=0;i<5;i++){const d=new Date(today);d.setDate(today.getDate()-i);doneDays.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);}
+// Sin días marcados al arrancar
 function renderCal(){
   document.getElementById('cal-m').textContent=MONTHS[calMonth]+' '+calYear;
   const grid=document.getElementById('cal-grid');grid.innerHTML='';
@@ -752,8 +752,8 @@ function initCalendar(){renderCal();}
 // HABITS
 function initHabits(){
   const habits=[
-    {icon:'📵',title:'Dejar el celular en la estación Hábitos',desc:'Ponelo en el dock antes de meterte en la cama.',time:'21:00',done:true,src:null},
-    {icon:'🔆',title:'Encender la luz Hábitos',desc:'Luz ámbar cálida para leer sin afectar tu melatonina.',time:'21:00',done:true,src:null},
+    {icon:'📵',title:'Dejar el celular en la estación Hábitos',desc:'Ponelo en el dock antes de meterte en la cama.',time:'21:00',done:false,src:null},
+    {icon:'🔆',title:'Encender la luz Hábitos',desc:'Luz ámbar cálida para leer sin afectar tu melatonina.',time:'21:00',done:false,src:null},
     {icon:'📖',title:'Leer al menos 10 páginas',desc:'Reemplazá el scroll nocturno por una historia real.',time:'21:15',done:false,src:null},
     {icon:'🌡️',title:'Bajar la temperatura a 16–19°C',desc:'El cuerpo necesita enfriarse para el sueño profundo.',time:'21:45',done:false,src:{label:'Sleep Foundation',url:'https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep'}},
     {icon:'🌙',title:'Activar alarma en la pulsera',desc:'Ya está configurada. La pulsera te despierta suavemente.',time:'22:00',done:false,src:null},
