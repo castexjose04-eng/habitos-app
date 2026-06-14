@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D0F14">
+<title>Hábitos — de la mañana a la noche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --night:#0D0F14;--deep:#13161E;--card:#1A1D27;--card2:#1F2330;
+  --amber:#E8A94A;--amber2:#C98B2A;--amber-glow:rgba(232,169,74,0.12);
+  --text:#F0EDE6;--text-soft:#9A9490;--text-dim:#5A5752;
+  --border:rgba(232,169,74,0.15);--border-soft:rgba(255,255,255,0.06);
+  --green:#4CAF7D;--blue:#6B9EE8;--purple:#9B7EE8;--red:#E05A5A;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--night);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
+
+/* ONBOARDING */
+#onboarding{position:fixed;inset:0;background:var(--night);z-index:1000;display:flex;flex-direction:column}
+.ob-progress{height:3px;background:var(--card2);flex-shrink:0}
+.ob-progress-fill{height:3px;background:var(--amber);transition:width 0.4s ease}
+.ob-slides{flex:1;position:relative;overflow:hidden}
+.ob-slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:40px 28px 100px;opacity:0;transform:translateX(40px);transition:all 0.4s ease;pointer-events:none;overflow-y:auto}
+.ob-slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.ob-slide.out{opacity:0;transform:translateX(-40px)}
+.ob-bottom{position:absolute;bottom:0;left:0;right:0;padding:14px 28px 28px;background:linear-gradient(to top,var(--night) 60%,transparent);display:flex;flex-direction:column;gap:10px}
+.ob-dots{display:flex;justify-content:center;gap:6px;margin-bottom:4px}
+.ob-dot{width:6px;height:6px;border-radius:50%;background:var(--card2);transition:all 0.3s}
+.ob-dot.active{background:var(--amber);width:18px;border-radius:3px}
+.ob-btn{width:100%;padding:15px;border-radius:var(--radius);background:var(--amber);color:var(--night);font-size:16px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans'}
+.ob-btn:disabled{opacity:0.4;cursor:not-allowed}
+.ob-skip{text-align:center;font-size:13px;color:var(--text-dim);cursor:pointer;padding:4px}
+
+/* ONBOARDING CONTENT */
+.ob-eyebrow{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.ob-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:400;line-height:1.2;margin-bottom:12px}
+.ob-title em{color:var(--amber);font-style:italic}
+.ob-desc{font-size:15px;color:var(--text-soft);line-height:1.7;margin-bottom:24px}
+.ob-philosophy{border-left:2px solid var(--amber2);padding-left:14px;font-style:italic;font-size:13px;color:var(--text-soft);line-height:1.7;margin-bottom:24px}
+.ob-feat{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:13px 15px;display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+.ob-feat-icon{font-size:20px;flex-shrink:0}
+.ob-feat-name{font-size:14px;font-weight:500;margin-bottom:2px}
+.ob-feat-desc{font-size:12px;color:var(--text-dim);line-height:1.4}
+.ob-form-lbl{font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;display:block;margin-top:14px}
+.ob-input{width:100%;background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:12px 15px;font-size:15px;color:var(--text);font-family:'DM Sans';outline:none;transition:border-color 0.2s}
+.ob-input:focus{border-color:var(--border)}
+.ob-input::placeholder{color:var(--text-dim)}
+.ob-prod-card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:13px 15px;display:flex;gap:12px;align-items:center;margin-bottom:8px;cursor:pointer;transition:all 0.15s}
+.ob-prod-card.sel{border-color:var(--border);background:var(--amber-glow)}
+.ob-prod-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:11px;margin-left:auto;flex-shrink:0;transition:all 0.15s}
+.ob-prod-card.sel .ob-prod-check{background:var(--amber);border-color:var(--amber);color:var(--night)}
+.ob-chip{padding:7px 15px;border-radius:20px;border:1px solid var(--border-soft);background:var(--card);font-size:13px;color:var(--text-soft);cursor:pointer;transition:all 0.15s;display:inline-block;margin:3px}
+.ob-chip.active{background:var(--amber-glow);border-color:var(--border);color:var(--amber)}
+.ob-time-row{display:flex;gap:8px;margin-top:8px}
+.ob-time-btn{flex:1;padding:11px 6px;border-radius:var(--radius);border:1px solid var(--border-soft);background:var(--card);text-align:center;cursor:pointer;transition:all 0.15s}
+.ob-time-btn.active{background:var(--amber-glow);border-color:var(--border)}
+.ob-time-t{font-family:'Playfair Display',serif;font-size:16px;color:var(--amber)}
+.ob-time-l{font-size:10px;color:var(--text-dim);margin-top:2px}
+.ob-sum-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px}
+.ob-sum-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:13px}
+.ob-sum-row:last-child{border-bottom:none}
+.ob-sum-key{color:var(--text-soft)}
+.ob-sum-val{color:var(--amber);font-weight:500;text-align:right;max-width:180px;font-size:12px}
+.ob-success-icon{width:70px;height:70px;border-radius:50%;background:var(--amber-glow);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px}
+
+/* SHELL */
+#app{display:none;flex-direction:column;height:100vh}
+#app.show{display:flex}
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--border-soft);background:rgba(13,15,20,0.97);flex-shrink:0}
+.top-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:500;color:var(--amber)}
+.top-right{font-size:12px;color:var(--text-dim)}
+.pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.page{display:none;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.bottom-nav{display:flex;border-top:1px solid var(--border-soft);background:rgba(13,15,20,0.97);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;cursor:pointer;border:none;background:transparent;color:var(--text-dim);transition:color 0.15s}
+.nav-btn.active{color:var(--amber)}
+.nav-btn i{font-size:22px}
+.nav-btn span{font-size:9px;letter-spacing:0.04em;text-transform:uppercase}
+
+/* SHARED UTILS */
+.pad{padding:0 20px;margin-bottom:18px}
+.s-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;margin-bottom:10px}
+.eyebrow{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+.card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius)}
+.bnote{text-align:center;padding:20px;font-size:11px;color:var(--text-dim);font-style:italic}
+.tog{width:40px;height:22px;border-radius:11px;border:1px solid var(--border-soft);background:var(--card2);cursor:pointer;position:relative;transition:all 0.3s;flex-shrink:0}
+.tog.on{background:var(--amber2);border-color:var(--amber)}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--text-dim);transition:all 0.3s}
+.tog.on::after{left:21px;background:var(--text)}
+
+/* ── HOME ── */
+.home-hero{padding:24px 20px 18px;position:relative;overflow:hidden}
+.home-glow{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:260px;height:260px;background:radial-gradient(circle,rgba(232,169,74,0.07) 0%,transparent 70%);pointer-events:none}
+.home-title{font-family:'Playfair Display',serif;font-size:26px;line-height:1.2;margin-bottom:10px}
+.home-title em{color:var(--amber);font-style:italic}
+.home-phil{font-size:12px;font-style:italic;color:var(--text-soft);border-left:2px solid var(--amber2);padding-left:12px;margin-bottom:20px;line-height:1.6}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px;margin-bottom:18px}
+.stat-card{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:11px 8px;text-align:center;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:0.4}
+.stat-icon{font-size:15px;margin-bottom:3px}
+.stat-val{font-family:'Playfair Display',serif;font-size:20px;color:var(--amber)}
+.stat-lbl{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em;margin-top:1px}
+.home-chart{padding:0 20px;margin-bottom:18px}
+.chart-box{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:14px}
+.chart-hdr{display:flex;justify-content:space-between;margin-bottom:10px}
+.chart-lbl{font-size:12px;color:var(--text-soft)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:65px;margin-bottom:5px}
+.bar-w{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.bar-i{width:100%;border-radius:3px 3px 0 0;cursor:pointer;transition:opacity 0.15s}
+.bar-d{font-size:9px;color:var(--text-dim);margin-top:3px}
+.phase-rows{margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.phase-row{display:flex;align-items:center;gap:8px}
+.phase-lbl{font-size:10px;color:var(--text-soft);width:52px}
+.phase-track{flex:1;height:5px;background:var(--card2);border-radius:3px;overflow:hidden}
+.phase-fill{height:5px;border-radius:3px}
+.phase-val{font-size:10px;color:var(--text-dim);width:34px;text-align:right}
+
+/* ── ALARM ── */
+.mode-tabs{display:flex;padding:14px 20px 0;gap:8px}
+.mode-tab{flex:1;padding:9px;border-radius:12px;font-size:13px;font-weight:500;border:1px solid var(--border-soft);background:transparent;color:var(--text-soft);cursor:pointer;transition:all 0.2s;text-align:center}
+.mode-tab.active{background:var(--amber-glow);border-color:var(--border);color:var(--amber)}
+.alarm-hero{padding:22px 20px 14px;text-align:center}
+.alarm-ring{margin:0 auto 14px;width:150px;height:150px;background:var(--card);border:1px solid var(--border);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 30px var(--amber-glow)}
+.alarm-time{font-family:'Playfair Display',serif;font-size:34px;color:var(--amber);line-height:1}
+.alarm-ampm{font-size:12px;color:var(--text-soft);margin-top:2px}
+.alarm-st{font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px}
+.alarm-tog-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}
+.tog-lbl{font-size:12px;color:var(--text-soft)}
+.alarm-opts{padding:0 20px;display:flex;flex-direction:column;gap:8px}
+.alarm-opt{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.opt-l{display:flex;align-items:center;gap:10px}
+.opt-icon{font-size:16px;flex-shrink:0}
+.opt-name{font-size:13px;font-weight:500}
+.opt-desc{font-size:11px;color:var(--text-dim);margin-top:1px}
+.opt-val{font-size:12px;color:var(--amber);cursor:pointer}
+.days-row{display:flex;gap:3px}
+.day-b{width:21px;height:21px;border-radius:50%;font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;color:var(--text-dim);background:var(--card2);cursor:pointer;border:1px solid var(--border-soft);transition:all 0.15s}
+.day-b.on{background:var(--amber);color:var(--night);border-color:var(--amber)}
+
+/* NAP */
+.nap-panel{padding:14px 20px;display:none}
+.nap-panel.active{display:block}
+.nap-rec{border-radius:12px;padding:13px;margin-bottom:12px;border:1px solid}
+.nap-presets{display:flex;gap:6px;margin-bottom:12px}
+.nap-pre{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--border-soft);background:var(--card);text-align:center;cursor:pointer;transition:all 0.15s}
+.nap-pre.active{background:var(--amber-glow);border-color:var(--border)}
+.nap-pre-t{font-family:'Playfair Display',serif;font-size:15px;color:var(--amber)}
+.nap-pre-n{font-size:9px;color:var(--text-dim);margin-top:1px}
+.nap-sl-card{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:13px;margin-bottom:12px}
+.nap-dur{font-family:'Playfair Display',serif;font-size:22px;color:var(--amber)}
+.nap-type-info{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:11px 13px;margin-bottom:12px}
+input[type=range]{width:100%;height:4px;border-radius:2px;background:var(--card2);outline:none;cursor:pointer;appearance:none;margin:7px 0 3px}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--amber);cursor:pointer;border:2px solid var(--night)}
+.nap-start{width:100%;padding:13px;border-radius:var(--radius);border:none;background:var(--amber);color:var(--night);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans'}
+
+/* ── HABITS ── */
+.habits-intro{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;position:relative;overflow:hidden}
+.habits-intro::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,var(--amber-glow) 0%,transparent 70%)}
+.h-quote{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:var(--text);line-height:1.6;margin-bottom:5px}
+.h-attr{font-size:10px;color:var(--amber);letter-spacing:0.08em;text-transform:uppercase}
+.streak-sec{margin:0 20px 14px;background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);overflow:hidden}
+.streak-top{display:flex;align-items:center;gap:12px;padding:12px 15px;border-bottom:1px solid var(--border-soft)}
+.streak-num{font-family:'Playfair Display',serif;font-size:34px;color:var(--amber);line-height:1}
+.streak-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--amber-glow);color:var(--amber);border:1px solid var(--border);margin-left:auto}
+.cal{padding:12px 15px}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-m{font-family:'Playfair Display',serif;font-size:14px}
+.cal-nav{display:flex;gap:4px}
+.cal-nav button{width:25px;height:25px;border-radius:7px;border:1px solid var(--border-soft);background:var(--card2);color:var(--text-soft);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.cal-wds{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px}
+.cal-wd{font-size:9px;color:var(--text-dim);text-align:center;padding:2px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--text-dim);border:1px solid transparent;transition:all 0.15s;user-select:none}
+.cal-day:hover:not(.empty):not(.future){border-color:var(--border-soft)}
+.cal-day.future{opacity:0.3;cursor:default}
+.cal-day.done{background:var(--amber-glow);border-color:var(--border);color:var(--amber);font-weight:500}
+.cal-day.today{border-color:var(--amber2);color:var(--text)}
+.cal-day.today.done{background:var(--amber);color:var(--night);font-weight:600}
+.cal-legend{display:flex;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)}
+.cal-li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim)}
+.cal-ld{width:8px;height:8px;border-radius:2px}
+.habit-list{padding:0 20px;display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.habit-card{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:12px 14px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;transition:all 0.15s}
+.habit-card.done{border-color:var(--border)}
+.habit-chk{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all 0.15s;font-size:11px}
+.habit-card.done .habit-chk{background:var(--amber);border-color:var(--amber);color:var(--night)}
+.habit-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.habit-card.done .habit-title{color:var(--text-soft);text-decoration:line-through}
+.habit-desc{font-size:11px;color:var(--text-dim);line-height:1.4}
+.habit-time{font-size:10px;color:var(--amber);margin-top:2px}
+.habit-src{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--text-dim);margin-top:4px;text-decoration:none;border:1px solid var(--border-soft);border-radius:20px;padding:2px 7px;background:var(--card2)}
+
+/* ── HISTORY ── */
+.hist-hdr{padding:18px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.month-nav{display:flex;align-items:center;gap:6px}
+.month-btn{width:26px;height:26px;border-radius:7px;border:1px solid var(--border-soft);background:var(--card);color:var(--text-soft);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.month-lbl{font-size:12px;color:var(--text-soft);min-width:76px;text-align:center}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0 20px;margin-bottom:14px}
+.metric-card{background:var(--card);border:1px solid var(--border-soft);border-radius:12px;padding:12px 13px;position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.metric-icon{font-size:14px;margin-bottom:3px}
+.metric-val{font-family:'Playfair Display',serif;font-size:21px;line-height:1}
+.metric-lbl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em;margin-top:2px}
+.metric-delta{font-size:10px;margin-top:2px}
+.chart-sec{padding:0 20px;margin-bottom:14px}
+.chart-tabs{display:flex;gap:4px}
+.chart-tab{padding:4px 10px;border-radius:20px;font-size:11px;border:1px solid var(--border-soft);background:transparent;color:var(--text-soft);cursor:pointer;transition:all 0.15s}
+.chart-tab.active{background:var(--amber-glow);border-color:var(--border);color:var(--amber)}
+.chart-wrap{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:13px}
+.b-chart{display:flex;align-items:flex-end;gap:2px;height:75px;margin-bottom:5px}
+.b-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;cursor:pointer}
+.b-col:hover .b-inner{opacity:0.75}
+.b-inner{width:100%;border-radius:2px 2px 0 0;min-height:2px;transition:all 0.3s}
+.chart-x{display:flex;gap:2px}
+.chart-xl{flex:1;font-size:8px;color:var(--text-dim);text-align:center}
+.chart-ref{border-top:1px dashed rgba(232,169,74,0.3);margin:3px 0 2px;display:flex;justify-content:flex-end}
+.chart-rl{font-size:9px;color:var(--amber);opacity:0.6}
+.dist-sec{padding:0 20px;margin-bottom:14px}
+.dist-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.dist-lbl{font-size:11px;color:var(--text-soft);width:58px;flex-shrink:0}
+.dist-track{flex:1;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+.dist-fill{height:6px;border-radius:3px;transition:width 0.8s}
+.dist-cnt{font-size:11px;color:var(--text-dim);width:22px;text-align:right}
+.log-sec{padding:0 20px;margin-bottom:14px}
+.phases-legend{display:flex;gap:10px;padding:7px 11px;background:var(--card2);border-radius:9px;margin-bottom:9px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:4px}
+.leg-bar{width:11px;border-radius:2px;flex-shrink:0}
+.leg-txt{font-size:10px;color:var(--text-soft)}
+.night-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-soft);cursor:pointer;transition:all 0.15s}
+.night-row:last-child{border-bottom:none}
+.night-row:hover{padding-left:3px}
+.night-date{font-size:11px;color:var(--text-dim);width:40px;flex-shrink:0}
+.night-bars{flex:1;display:flex;gap:2px;align-items:flex-end;height:22px}
+.night-seg{border-radius:2px}
+.night-h{font-size:11px;color:var(--text-soft);width:30px;text-align:right;flex-shrink:0}
+.night-sc{font-family:'Playfair Display',serif;font-size:14px;width:30px;text-align:right;flex-shrink:0}
+.night-tag{font-size:10px;padding:2px 6px;border-radius:20px;flex-shrink:0}
+
+/* ── PROFILE ── */
+.prof-hero{padding:22px 20px 14px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.av-ring{width:72px;height:72px;border-radius:50%;border:2px solid var(--amber);padding:3px;background:var(--card2);position:relative;cursor:pointer}
+.av-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#2A2540,#1A1D27);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;color:var(--amber)}
+.av-edit{position:absolute;bottom:1px;right:1px;width:19px;height:19px;border-radius:50%;background:var(--amber);color:var(--night);display:flex;align-items:center;justify-content:center;font-size:10px}
+.prof-name{font-family:'Playfair Display',serif;font-size:19px;cursor:pointer;border-bottom:1px dashed transparent;transition:border-color 0.2s}
+.prof-name:hover{border-color:var(--amber2)}
+.prof-name[contenteditable="true"]{outline:none;border-color:var(--amber)}
+.prof-since{font-size:11px;color:var(--text-dim)}
+.prof-stats{display:flex;gap:18px}
+.pstat{text-align:center}
+.pstat-val{font-family:'Playfair Display',serif;font-size:17px;color:var(--amber)}
+.pstat-lbl{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em}
+.setting-card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);overflow:hidden}
+.setting-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border-soft);transition:background 0.15s}
+.setting-row:last-child{border-bottom:none}
+.setting-row:hover{background:var(--card2)}
+.s-icon{font-size:15px;flex-shrink:0;width:22px;text-align:center}
+.s-name{font-size:13px;flex:1}
+.s-desc{font-size:11px;color:var(--text-dim);margin-top:1px}
+.s-val{font-size:11px;color:var(--text-soft)}
+.s-sel{background:var(--card2);border:1px solid var(--border-soft);border-radius:7px;color:var(--amber);font-size:12px;padding:3px 7px;cursor:pointer;font-family:'DM Sans';outline:none;appearance:none}
+.sl-wrap{padding:9px 14px 12px;border-bottom:1px solid var(--border-soft)}
+.sl-hdr{display:flex;justify-content:space-between;margin-bottom:7px}
+.sl-name{font-size:13px}
+.sl-val{font-size:12px;color:var(--amber);font-weight:500}
+.prod-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border-soft)}
+.prod-row:last-child{border-bottom:none}
+.prod-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.prod-name{font-size:13px;flex:1}
+.prod-status{font-size:10px;padding:2px 8px;border-radius:20px}
+.danger-btn{width:100%;padding:12px;border-radius:var(--radius);border:1px solid rgba(224,90,90,0.3);background:rgba(224,90,90,0.06);color:#E05A5A;font-size:13px;cursor:pointer;font-family:'DM Sans';transition:all 0.2s}
+
+/* TIME PICKER */
+.tp-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:flex-end;justify-content:center}
+.tp-overlay.open{display:flex}
+.tp-inner{background:var(--deep);border-top:1px solid var(--border);border-radius:18px 18px 0 0;padding:20px;width:100%}
+.tp-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:14px;text-align:center}
+.tp-wheels{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+.tp-wheel{display:flex;flex-direction:column;align-items:center;gap:5px}
+.tp-wheel button{background:var(--card);border:1px solid var(--border-soft);border-radius:7px;color:var(--amber);font-size:16px;width:48px;height:34px;cursor:pointer}
+.tp-v{font-family:'Playfair Display',serif;font-size:34px;color:var(--text);min-width:48px;text-align:center}
+.tp-sep{font-family:'Playfair Display',serif;font-size:30px;color:var(--amber)}
+.tp-save{width:100%;padding:12px;border-radius:11px;background:var(--amber);color:var(--night);font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans'}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ ONBOARDING ═══════════════ -->
+<div id="onboarding">
+  <div class="ob-progress"><div class="ob-progress-fill" id="ob-prog" style="width:0%"></div></div>
+  <div class="ob-slides">
+
+    <!-- SLIDE 0 -->
+    <div class="ob-slide active" id="obs-0">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+        <div class="ob-eyebrow">Bienvenido/a a</div>
+        <div class="ob-title">Hábitos.<br><em>De la mañana<br>a la noche.</em></div>
+        <div class="ob-desc">Un ecosistema diseñado para generar mejores hábitos y cuidar tu bienestar.</div>
+        <div class="ob-philosophy">"La idea no es eliminar el celular de tu vida — es darle un lugar y un momento."</div>
+        <div class="ob-feat"><div class="ob-feat-icon">🌙</div><div><div class="ob-feat-name">Ritual nocturno</div><div class="ob-feat-desc">Hábitos simples que mejoran tu sueño noche a noche.</div></div></div>
+        <div class="ob-feat"><div class="ob-feat-icon">📊</div><div><div class="ob-feat-name">Seguimiento de sueño</div><div class="ob-feat-desc">Tu pulsera mide las fases y te da un puntaje cada mañana.</div></div></div>
+        <div class="ob-feat"><div class="ob-feat-icon">📵</div><div><div class="ob-feat-name">Sin pantalla al despertar</div><div class="ob-feat-desc">La pulsera te vibra. El celular duerme en la estación.</div></div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="ob-slide" id="obs-1">
+      <div class="ob-eyebrow">Paso 1 de 4</div>
+      <div class="ob-title">¿Cómo te<br><em>llamás?</em></div>
+      <div class="ob-desc">Así personalizamos tu experiencia.</div>
+      <label class="ob-form-lbl">Tu nombre</label>
+      <input class="ob-input" id="ob-name" type="text" placeholder="Ej: Martín" oninput="checkObName()">
+      <label class="ob-form-lbl">Tu edad</label>
+      <input class="ob-input" id="ob-age" type="number" placeholder="Ej: 32" min="10" max="99">
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="ob-slide" id="obs-2">
+      <div class="ob-eyebrow">Paso 2 de 4</div>
+      <div class="ob-title">¿Qué productos<br><em>Hábitos tenés?</em></div>
+      <div class="ob-desc">Seleccioná los que ya tenés.</div>
+      <div class="ob-prod-card sel" onclick="this.classList.toggle('sel');this.querySelector('.ob-prod-check').textContent=this.classList.contains('sel')?'✓':''">
+        <div style="font-size:22px">⌚</div><div><div style="font-size:14px;font-weight:500">Pulsera Hábitos</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">Alarma vibrante y seguimiento de sueño</div></div>
+        <div class="ob-prod-check">✓</div>
+      </div>
+      <div class="ob-prod-card" onclick="this.classList.toggle('sel');this.querySelector('.ob-prod-check').textContent=this.classList.contains('sel')?'✓':''">
+        <div style="font-size:22px">💡</div><div><div style="font-size:14px;font-weight:500">Luz de lectura Hábitos</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">Luz ámbar para leer sin afectar el sueño</div></div>
+        <div class="ob-prod-check"></div>
+      </div>
+      <div class="ob-prod-card" onclick="this.classList.toggle('sel');this.querySelector('.ob-prod-check').textContent=this.classList.contains('sel')?'✓':''">
+        <div style="font-size:22px">🗃️</div><div><div style="font-size:14px;font-weight:500">Estación nocturna Hábitos</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">El hogar del celular mientras dormís</div></div>
+        <div class="ob-prod-check"></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="ob-slide" id="obs-3">
+      <div class="ob-eyebrow">Paso 3 de 4</div>
+      <div class="ob-title">¿Cuál es tu<br><em>objetivo?</em></div>
+      <div class="ob-desc">Elegí uno o más.</div>
+      <div style="margin-bottom:20px">
+        <div class="ob-chip active" onclick="this.classList.toggle('active')">😴 Dormir más horas</div>
+        <div class="ob-chip" onclick="this.classList.toggle('active')">🧠 Mejorar calidad de sueño</div>
+        <div class="ob-chip" onclick="this.classList.toggle('active')">📵 Usar menos el celular de noche</div>
+        <div class="ob-chip" onclick="this.classList.toggle('active')">📖 Leer más antes de dormir</div>
+        <div class="ob-chip" onclick="this.classList.toggle('active')">⚡ Despertar con más energía</div>
+        <div class="ob-chip" onclick="this.classList.toggle('active')">😰 Reducir el estrés nocturno</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-soft);margin-bottom:8px">¿A qué hora querés dormirte?</div>
+      <div class="ob-time-row">
+        <div class="ob-time-btn" onclick="selBed(this,'21:30')"><div class="ob-time-t">21:30</div><div class="ob-time-l">Temprano</div></div>
+        <div class="ob-time-btn active" onclick="selBed(this,'22:30')"><div class="ob-time-t">22:30</div><div class="ob-time-l">Normal</div></div>
+        <div class="ob-time-btn" onclick="selBed(this,'23:30')"><div class="ob-time-t">23:30</div><div class="ob-time-l">Tarde</div></div>
+        <div class="ob-time-btn" onclick="selBed(this,'00:30')"><div class="ob-time-t">00:30</div><div class="ob-time-l">Muy tarde</div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="ob-slide" id="obs-4">
+      <div class="ob-eyebrow">Paso 4 de 4</div>
+      <div class="ob-title">Tu perfil<br><em>Hábitos</em></div>
+      <div class="ob-desc">Todo listo. Así quedó tu configuración.</div>
+      <div class="ob-sum-card" id="ob-summary"></div>
+      <div class="ob-feat" style="border:1px solid var(--border)"><div class="ob-feat-icon">💡</div><div><div class="ob-feat-name">Tu primera noche con Hábitos</div><div class="ob-feat-desc">Esta noche te mostramos tu ritual personalizado. La pulsera registra tu sueño y mañana tenés tu primer puntaje.</div></div></div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="ob-slide" id="obs-5">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center">
+        <div style="width:70px;height:70px;border-radius:50%;background:var(--amber-glow);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px">🌙</div>
+        <div class="ob-title" style="text-align:center">¡Todo<br><em>listo!</em></div>
+        <div class="ob-desc" style="text-align:center">Tu ritual empieza esta noche.<br>Poné el celular en la estación y dejá que la pulsera haga el resto.</div>
+        <div class="ob-philosophy" style="max-width:300px;margin:0 auto 24px">"La idea no es eliminar el celular de tu vida — es darle un lugar y un momento."</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="ob-bottom">
+    <div class="ob-dots" id="ob-dots"></div>
+    <button class="ob-btn" id="ob-btn" onclick="obNext()">Empezar</button>
+    <div class="ob-skip" id="ob-skip" onclick="obNext()" style="display:none">Omitir por ahora</div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+  <div class="top-nav">
+    <div class="top-logo">Hábitos</div>
+    <div class="top-right" id="clock-top">--:--</div>
+  </div>
+  <div class="pages" id="pages">
+
+    <!-- HOME -->
+    <div class="page active" id="p-home">
+      <div class="home-hero">
+        <div class="home-glow"></div>
+        <div class="eyebrow">Buenas noches</div>
+        <div class="home-title">Tu noche,<br><em>sin distracciones</em></div>
+        <div class="home-phil">"La idea no es eliminar el celular de tu vida — es darle un lugar y un momento."</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon">🌙</div><div class="stat-val">7.2</div><div class="stat-lbl">horas</div></div>
+        <div class="stat-card"><div class="stat-icon">💤</div><div class="stat-val">84</div><div class="stat-lbl">calidad</div></div>
+        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-val" id="home-streak">5</div><div class="stat-lbl">racha</div></div>
+      </div>
+      <div class="home-chart">
+        <div class="chart-box">
+          <div class="chart-hdr"><span class="chart-lbl">Esta semana</span><span style="font-size:11px;color:var(--text-dim)">horas de sueño</span></div>
+          <div class="bars" id="home-bars"></div>
+          <div style="display:flex;gap:4px" id="home-days"></div>
+          <div class="phase-rows">
+            <div class="phase-row"><span class="phase-lbl">Profundo</span><div class="phase-track"><div class="phase-fill" style="width:35%;background:#E8A94A"></div></div><span class="phase-val">1h 48m</span></div>
+            <div class="phase-row"><span class="phase-lbl">REM</span><div class="phase-track"><div class="phase-fill" style="width:25%;background:#C98B2A"></div></div><span class="phase-val">1h 18m</span></div>
+            <div class="phase-row"><span class="phase-lbl">Liviano</span><div class="phase-track"><div class="phase-fill" style="width:40%;background:#3A3530"></div></div><span class="phase-val">4h 6m</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bnote">Hábitos · de la mañana a la noche</div>
+    </div>
+
+    <!-- ALARM -->
+    <div class="page" id="p-alarm">
+      <div class="mode-tabs">
+        <button class="mode-tab active" onclick="switchMode('alarm',this)">🌙 Alarma</button>
+        <button class="mode-tab" onclick="switchMode('nap',this)">😴 Siesta</button>
+      </div>
+      <div id="alarm-panel">
+        <div class="alarm-hero">
+          <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Pulsera Hábitos</div>
+          <div class="alarm-ring" onclick="openTP()">
+            <div class="alarm-time" id="alarm-disp">06:30</div>
+            <div class="alarm-ampm">AM</div>
+            <div class="alarm-st" id="alarm-st">ACTIVA · Tocá para editar</div>
+          </div>
+          <div class="alarm-tog-row">
+            <span class="tog-lbl">Alarma</span>
+            <div class="tog on" id="alarm-tog" onclick="toggleAlarm()"></div>
+            <span class="tog-lbl" id="tog-lbl">Activa</span>
+          </div>
+        </div>
+        <div class="alarm-opts">
+          <div class="alarm-opt"><div class="opt-l"><div class="opt-icon">📳</div><div><div class="opt-name">Vibración</div><div class="opt-desc">Intensidad al despertar</div></div></div><div class="opt-val" onclick="cycleVib(this)">Suave</div></div>
+          <div class="alarm-opt"><div class="opt-l"><div class="opt-icon">🌅</div><div><div class="opt-name">Despertar inteligente</div><div class="opt-desc">±20 min en sueño liviano</div></div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="alarm-opt"><div class="opt-l"><div class="opt-icon">📅</div><div><div class="opt-name">Días</div></div></div><div class="days-row"><div class="day-b on" onclick="this.classList.toggle('on')">L</div><div class="day-b on" onclick="this.classList.toggle('on')">M</div><div class="day-b on" onclick="this.classList.toggle('on')">X</div><div class="day-b on" onclick="this.classList.toggle('on')">J</div><div class="day-b on" onclick="this.classList.toggle('on')">V</div><div class="day-b" onclick="this.classList.toggle('on')">S</div><div class="day-b" onclick="this.classList.toggle('on')">D</div></div></div>
+          <div class="alarm-opt" style="border-color:rgba(232,169,74,0.25);background:rgba(232,169,74,0.04)"><div class="opt-l"><div class="opt-icon">📵</div><div><div class="opt-name">Modo Hábitos nocturno</div><div class="opt-desc">El celular duerme, la pulsera despierta</div></div></div><div class="opt-val">Activo</div></div>
+        </div>
+        <div class="bnote">La pulsera vibra. El celular duerme.</div>
+      </div>
+      <div class="nap-panel" id="nap-panel">
+        <div class="nap-rec" id="nap-rec"></div>
+        <div class="nap-presets">
+          <div class="nap-pre active" onclick="setPreset(20,this)"><div class="nap-pre-t">20'</div><div class="nap-pre-n">Poder</div></div>
+          <div class="nap-pre" onclick="setPreset(30,this)"><div class="nap-pre-t">30'</div><div class="nap-pre-n">Refresh</div></div>
+          <div class="nap-pre" onclick="setPreset(90,this)"><div class="nap-pre-t">90'</div><div class="nap-pre-n">Ciclo</div></div>
+          <div class="nap-pre" onclick="setPreset(120,this)"><div class="nap-pre-t">120'</div><div class="nap-pre-n">Recuperar</div></div>
+        </div>
+        <div class="nap-sl-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:13px">⏱ Duración</span><div><div class="nap-dur" id="nap-dur">20 min</div><div style="font-size:10px;color:var(--text-dim)" id="nap-sub">Siesta de poder</div></div></div>
+          <input type="range" id="nap-sl" min="5" max="120" value="20" step="5" oninput="updateNap(this.value)">
+          <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--text-dim)">5'</span><span style="font-size:9px;color:var(--amber)">20'</span><span style="font-size:9px;color:var(--amber)">90'</span><span style="font-size:9px;color:var(--text-dim)">120'</span></div>
+        </div>
+        <div class="nap-type-info" id="nap-type"></div>
+        <button class="nap-start" onclick="alert('Siesta iniciada en la pulsera Hábitos 🌙')">Iniciar siesta en la pulsera</button>
+        <div class="bnote">Hábitos · de la mañana a la noche</div>
+      </div>
+    </div>
+
+    <!-- HABITS -->
+    <div class="page" id="p-habits">
+      <div style="padding:18px 20px 12px">
+        <div class="eyebrow">Esta noche</div>
+        <div class="s-title">Ritual nocturno</div>
+        <div class="habits-intro">
+          <div class="h-quote">"La idea no es eliminar el celular de tu vida — es darle un lugar y un momento."</div>
+          <div class="h-attr">— Filosofía Hábitos</div>
+        </div>
+      </div>
+      <div class="streak-sec">
+        <div class="streak-top">
+          <div class="streak-num" id="h-streak">5</div>
+          <div><div style="font-size:13px;font-weight:500">días seguidos</div><div style="font-size:11px;color:var(--text-soft)">con tu ritual</div></div>
+          <div class="streak-badge" id="h-badge">🔥 En racha</div>
+        </div>
+        <div class="cal">
+          <div class="cal-hdr"><div class="cal-m" id="cal-m"></div><div class="cal-nav"><button onclick="changeCalMonth(-1)">‹</button><button onclick="changeCalMonth(1)">›</button></div></div>
+          <div class="cal-wds"><div class="cal-wd">Dom</div><div class="cal-wd">Lun</div><div class="cal-wd">Mar</div><div class="cal-wd">Mié</div><div class="cal-wd">Jue</div><div class="cal-wd">Vie</div><div class="cal-wd">Sáb</div></div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <div class="cal-li"><div class="cal-ld" style="background:var(--amber);opacity:0.8"></div>Ritual completo</div>
+            <div class="cal-li"><div class="cal-ld" style="border:1px solid var(--amber2)"></div>Hoy</div>
+          </div>
+        </div>
+      </div>
+      <div class="habit-list" id="habit-list"></div>
+      <div class="bnote">Hábitos · de la mañana a la noche</div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="page" id="p-history">
+      <div class="hist-hdr">
+        <div class="s-title" style="margin-bottom:0">Historial</div>
+        <div class="month-nav"><button class="month-btn" onclick="changeHistMonth(-1)">‹</button><div class="month-lbl" id="hist-month">Mayo 2026</div><button class="month-btn" onclick="changeHistMonth(1)">›</button></div>
+      </div>
+      <div class="metrics" id="hist-metrics"></div>
+      <div class="chart-sec">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+          <div class="s-title" style="margin-bottom:0;font-size:16px">Evolución</div>
+          <div class="chart-tabs"><button class="chart-tab active" onclick="switchHistChart('score',this)">Puntaje</button><button class="chart-tab" onclick="switchHistChart('hours',this)">Horas</button></div>
+        </div>
+        <div class="chart-wrap"><div class="b-chart" id="hist-bars"></div><div class="chart-ref"><span class="chart-rl" id="hist-ref">objetivo: 80</span></div><div class="chart-x" id="hist-x"></div></div>
+      </div>
+      <div class="dist-sec">
+        <div class="s-title" style="font-size:16px;margin-bottom:9px">Distribución</div>
+        <div id="hist-dist"></div>
+      </div>
+      <div class="log-sec">
+        <div class="s-title" style="font-size:16px;margin-bottom:9px">Noches</div>
+        <div class="phases-legend">
+          <div class="leg-item"><div class="leg-bar" style="height:13px;background:#3A3530"></div><span class="leg-txt">Liviano</span></div>
+          <div class="leg-item"><div class="leg-bar" style="height:17px;background:#6B9EE8"></div><span class="leg-txt">Profundo</span></div>
+          <div class="leg-item"><div class="leg-bar" style="height:15px;background:#9B7EE8"></div><span class="leg-txt">REM</span></div>
+        </div>
+        <div id="hist-log"></div>
+      </div>
+      <div class="bnote">Hábitos · de la mañana a la noche</div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="p-profile">
+      <div class="prof-hero">
+        <div class="av-ring"><div class="av-inner" id="av-init">M</div><div class="av-edit">✎</div></div>
+        <div class="prof-name" id="prof-name" contenteditable="false" onclick="editName()">Martín</div>
+        <div class="prof-since">Con Hábitos desde mayo 2026</div>
+        <div class="prof-stats">
+          <div class="pstat"><div class="pstat-val">31</div><div class="pstat-lbl">noches</div></div>
+          <div class="pstat"><div class="pstat-val">84</div><div class="pstat-lbl">prom.</div></div>
+          <div class="pstat"><div class="pstat-val">18</div><div class="pstat-lbl">racha máx.</div></div>
+        </div>
+      </div>
+      <div style="padding:0 20px;display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+        <div class="s-title" style="font-size:14px">Objetivos de sueño</div>
+        <div class="setting-card">
+          <div class="sl-wrap"><div class="sl-hdr"><span class="sl-name">⏱️ Horas objetivo</span><span class="sl-val" id="sl-h">8h</span></div><input type="range" min="5" max="10" value="8" step="0.5" oninput="document.getElementById('sl-h').textContent=this.value+'h'"></div>
+          <div class="sl-wrap" style="border-bottom:none"><div class="sl-hdr"><span class="sl-name">🛏️ Hora de dormir</span><span class="sl-val" id="sl-b">22:30</span></div><input type="range" min="20" max="25" value="22.5" step="0.5" oninput="updateBed(this)"></div>
+        </div>
+        <div class="s-title" style="font-size:14px">Pulsera Hábitos</div>
+        <div class="setting-card">
+          <div class="setting-row"><div class="s-icon">📳</div><div class="s-name">Vibración</div><select class="s-sel"><option>Suave</option><option selected>Media</option><option>Fuerte</option></select></div>
+          <div class="setting-row"><div class="s-icon">🌅</div><div class="s-name">Despertar inteligente</div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="setting-row"><div class="s-icon">🔋</div><div><div class="s-name">Batería</div><div class="s-desc">Última sync: hoy 08:14</div></div><span class="s-val" style="color:#4CAF7D">87%</span></div>
+        </div>
+        <div class="s-title" style="font-size:14px">Mis productos Hábitos</div>
+        <div class="setting-card">
+          <div class="prod-row"><div class="prod-dot" style="background:#E8A94A"></div><div class="prod-name">Pulsera Hábitos</div><div class="prod-status" style="background:rgba(76,175,125,0.15);color:#4CAF7D">Conectada</div></div>
+          <div class="prod-row"><div class="prod-dot" style="background:#E8A94A"></div><div class="prod-name">Luz de lectura Hábitos</div><div class="prod-status" style="background:rgba(76,175,125,0.15);color:#4CAF7D">Activa</div></div>
+          <div class="prod-row" style="border-bottom:none"><div class="prod-dot" style="background:var(--text-dim)"></div><div class="prod-name">Estación nocturna Hábitos</div><div class="prod-status" style="background:var(--card2);color:var(--text-dim)">No registrada</div></div>
+        </div>
+        <div class="s-title" style="font-size:14px">Cuenta</div>
+        <div class="setting-card">
+          <div class="setting-row"><div class="s-icon">🌐</div><div class="s-name">Idioma</div><select class="s-sel"><option selected>Español</option><option>English</option></select></div>
+          <div class="setting-row"><div class="s-icon">🌡️</div><div class="s-name">Temperatura</div><select class="s-sel"><option selected>°C</option><option>°F</option></select></div>
+          <div class="setting-row" style="border-bottom:none"><div class="s-icon">📋</div><div class="s-name">Versión</div><span class="s-val">1.0.0</span></div>
+        </div>
+        <button class="danger-btn">Cerrar sesión</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="showPage('home',this)"><i class="ti ti-home"></i><span>Inicio</span></button>
+    <button class="nav-btn" onclick="showPage('alarm',this)"><i class="ti ti-alarm"></i><span>Alarma</span></button>
+    <button class="nav-btn" onclick="showPage('habits',this)"><i class="ti ti-moon"></i><span>Hábitos</span></button>
+    <button class="nav-btn" onclick="showPage('history',this)"><i class="ti ti-chart-bar"></i><span>Historial</span></button>
+    <button class="nav-btn" onclick="showPage('profile',this)"><i class="ti ti-user"></i><span>Perfil</span></button>
+  </div>
+  <div class="tp-overlay" id="tp-overlay" onclick="closeTP(event)">
+    <div class="tp-inner">
+      <div class="tp-title">Configurar alarma</div>
+      <div class="tp-wheels">
+        <div class="tp-wheel"><button onclick="chH(1)">▲</button><div class="tp-v" id="tp-h">06</div><button onclick="chH(-1)">▼</button></div>
+        <div class="tp-sep">:</div>
+        <div class="tp-wheel"><button onclick="chM(5)">▲</button><div class="tp-v" id="tp-m">30</div><button onclick="chM(-5)">▼</button></div>
+      </div>
+      <button class="tp-save" onclick="saveAlarm()">Guardar en pulsera Hábitos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const today=new Date();
+let obCurrent=0;
+const OB_TOTAL=6;
+let obBedtime='22:30';
+const obState={name:'',age:'',bedtime:'22:30',products:[],goals:[]};
+
+// ── ONBOARDING ──
+function renderObDots(){
+  const d=document.getElementById('ob-dots');
+  d.innerHTML=Array.from({length:OB_TOTAL},(_,i)=>`<div class="ob-dot ${i===obCurrent?'active':''}"></div>`).join('');
+}
+function updateObUI(){
+  const btn=document.getElementById('ob-btn');
+  const skip=document.getElementById('ob-skip');
+  const labels=['Empezar','Continuar','Continuar','Continuar','Ver mi perfil','¡Ir a la app!'];
+  btn.textContent=labels[obCurrent]||'Continuar';
+  skip.style.display=(obCurrent===0||obCurrent===5)?'none':'block';
+  btn.disabled=(obCurrent===1&&!document.getElementById('ob-name')?.value?.trim());
+  document.getElementById('ob-prog').style.width=(obCurrent/(OB_TOTAL-1)*100)+'%';
+}
+function checkObName(){updateObUI();}
+function selBed(el,time){document.querySelectorAll('.ob-time-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');obBedtime=time;obState.bedtime=time;}
+function obNext(){
+  if(obCurrent===1){obState.name=document.getElementById('ob-name').value.trim()||'Vos';obState.age=document.getElementById('ob-age').value||'—';}
+  if(obCurrent===2){obState.products=[...document.querySelectorAll('.ob-prod-card.sel')].map(c=>c.querySelector('div:nth-child(2) div').textContent);}
+  if(obCurrent===3){obState.goals=[...document.querySelectorAll('.ob-chip.active')].map(c=>c.textContent);obState.bedtime=obBedtime;}
+  if(obCurrent===4){renderObSummary();}
+  if(obCurrent===5){launchApp();return;}
+  const prev=document.getElementById('obs-'+obCurrent);
+  prev.classList.add('out');prev.classList.remove('active');
+  setTimeout(()=>prev.classList.remove('out'),400);
+  obCurrent++;
+  document.getElementById('obs-'+obCurrent).classList.add('active');
+  renderObDots();updateObUI();
+}
+function renderObSummary(){
+  const prods=[...document.querySelectorAll('.ob-prod-card.sel')].map(c=>c.querySelector('div:nth-child(2) div').textContent);
+  const goals=[...document.querySelectorAll('.ob-chip.active')].map(c=>c.textContent);
+  document.getElementById('ob-summary').innerHTML=`
+    <div class="ob-sum-row"><span class="ob-sum-key">Nombre</span><span class="ob-sum-val">${obState.name}</span></div>
+    <div class="ob-sum-row"><span class="ob-sum-key">Edad</span><span class="ob-sum-val">${obState.age} años</span></div>
+    <div class="ob-sum-row"><span class="ob-sum-key">Hora de dormir</span><span class="ob-sum-val">${obState.bedtime}</span></div>
+    <div class="ob-sum-row"><span class="ob-sum-key">Productos</span><span class="ob-sum-val">${prods.length?prods.join(', '):'Ninguno aún'}</span></div>
+    <div class="ob-sum-row"><span class="ob-sum-key">Objetivos</span><span class="ob-sum-val">${goals.length?goals.join(' · '):'—'}</span></div>`;
+}
+function launchApp(){
+  document.getElementById('onboarding').style.display='none';
+  document.getElementById('app').classList.add('show');
+  if(obState.name){document.getElementById('prof-name').textContent=obState.name;document.getElementById('av-init').textContent=obState.name[0].toUpperCase();}
+  initApp();
+}
+renderObDots();updateObUI();
+
+// ── APP ──
+function initApp(){
+  updateClock();setInterval(updateClock,10000);
+  initHomeBars();initNap();initCalendar();initHabits();initHistory();
+}
+
+function updateClock(){const n=new Date();document.getElementById('clock-top').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// HOME BARS
+function initHomeBars(){
+  const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Hoy'];
+  const hrs=[6.5,7.8,5.9,8.1,7.2,6.8,7.2];
+  const maxH=Math.max(...hrs);
+  const bEl=document.getElementById('home-bars');
+  const dEl=document.getElementById('home-days');
+  days.forEach((d,i)=>{
+    const pct=(hrs[i]/maxH)*100;
+    bEl.innerHTML+=`<div class="bar-w"><div class="bar-i" style="height:${pct}%;background:${i===6?'#E8A94A':'rgba(232,169,74,0.3)'}"></div></div>`;
+    dEl.innerHTML+=`<span style="flex:1;font-size:9px;color:var(--text-dim);text-align:center">${d}</span>`;
+  });
+}
+
+// ALARM
+let alarmOn=true,tpH=6,tpM=30;
+function toggleAlarm(){alarmOn=!alarmOn;document.getElementById('alarm-tog').classList.toggle('on',alarmOn);document.getElementById('tog-lbl').textContent=alarmOn?'Activa':'Apagada';document.getElementById('alarm-st').textContent=alarmOn?'ACTIVA · Tocá para editar':'APAGADA';}
+const vibs=['Suave','Media','Fuerte'];let vIdx=0;
+function cycleVib(el){vIdx=(vIdx+1)%3;el.textContent=vibs[vIdx];}
+function openTP(){document.getElementById('tp-overlay').classList.add('open');}
+function closeTP(e){if(e.target===document.getElementById('tp-overlay'))document.getElementById('tp-overlay').classList.remove('open');}
+function chH(d){tpH=(tpH+d+24)%24;document.getElementById('tp-h').textContent=String(tpH).padStart(2,'0');}
+function chM(d){tpM=(tpM+d+60)%60;document.getElementById('tp-m').textContent=String(tpM).padStart(2,'0');}
+function saveAlarm(){document.getElementById('alarm-disp').textContent=String(tpH).padStart(2,'0')+':'+String(tpM).padStart(2,'0');document.getElementById('tp-overlay').classList.remove('open');}
+function switchMode(mode,btn){
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  document.getElementById('alarm-panel').style.display=mode==='alarm'?'block':'none';
+  document.getElementById('nap-panel').classList.toggle('active',mode==='nap');
+}
+
+// NAP
+const napTypes=[{max:20,label:'⚡ Siesta de poder',color:'#4CAF7D',desc:'Solo sueño liviano. Despertás activo sin aturdimiento.'},{max:45,label:'🧠 Siesta de memoria',color:'#6B9EE8',desc:'Mejora memoria y aprendizaje.'},{max:90,label:'🌊 Ciclo completo',color:'#E8A94A',desc:'Un ciclo completo. Máxima recuperación.'},{max:120,label:'🛌 Siesta de recuperación',color:'#9B7EE8',desc:'Para noches muy cortas. Hacela antes de las 15hs.'}];
+function getNapType(m){return m<=20?napTypes[0]:m<=45?napTypes[1]:m<=90?napTypes[2]:napTypes[3];}
+function updateNap(v){
+  v=parseInt(v);const t=getNapType(v);
+  const disp=v<60?v+' min':Math.floor(v/60)+'h'+(v%60>0?' '+v%60+'min':'');
+  document.getElementById('nap-dur').textContent=disp;
+  document.getElementById('nap-sub').textContent=t.label;
+  document.getElementById('nap-sub').style.color=t.color;
+  document.getElementById('nap-type').innerHTML=`<div style="font-size:11px;font-weight:500;color:${t.color};margin-bottom:4px">${t.label}</div><div style="font-size:12px;color:var(--text-dim);line-height:1.4">${t.desc}</div>`;
+  document.querySelectorAll('.nap-pre').forEach(p=>p.classList.remove('active'));
+}
+function setPreset(m,el){document.getElementById('nap-sl').value=m;updateNap(m);document.querySelectorAll('.nap-pre').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function initNap(){
+  const r=document.getElementById('nap-rec');
+  r.style.cssText='background:rgba(76,175,125,0.08);border-color:rgba(76,175,125,0.25)';
+  r.innerHTML=`<div style="font-size:13px;font-weight:500;color:#4CAF7D;margin-bottom:5px">✅ Tu sueño fue bueno — siesta corta ideal</div><div style="font-size:12px;color:var(--text-soft);line-height:1.5">Dormiste bien anoche (7.2h, puntaje 84). Una siesta de 20 min te dará energía sin afectar esta noche.</div><a href="https://www.sleepfoundation.org/how-sleep-works/does-napping-impact-sleep-at-night" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--text-dim);margin-top:7px;text-decoration:none;border:1px solid var(--border-soft);border-radius:20px;padding:2px 7px;background:var(--card2)"><span style="width:4px;height:4px;border-radius:50%;background:#4CAF7D;display:inline-block"></span>Sleep Foundation ↗</a>`;
+  updateNap(20);
+}
+
+// CALENDAR
+let calMonth=today.getMonth(),calYear=today.getFullYear();
+const doneDays=new Set();
+for(let i=0;i<5;i++){const d=new Date(today);d.setDate(today.getDate()-i);doneDays.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);}
+function renderCal(){
+  document.getElementById('cal-m').textContent=MONTHS[calMonth]+' '+calYear;
+  const grid=document.getElementById('cal-grid');grid.innerHTML='';
+  const first=new Date(calYear,calMonth,1).getDay();
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=dim;d++){
+    const key=`${calYear}-${calMonth}-${d}`;
+    const cell=document.createElement('div');
+    const cd=new Date(calYear,calMonth,d);
+    const isToday=cd.toDateString()===today.toDateString();
+    const isFuture=cd>today;
+    let cls='cal-day';
+    if(isFuture)cls+=' future';else if(doneDays.has(key))cls+=' done';
+    if(isToday)cls+=' today';
+    cell.className=cls;cell.textContent=d;
+    if(!isFuture)cell.onclick=()=>{if(doneDays.has(key))doneDays.delete(key);else doneDays.add(key);updateStreak();renderCal();};
+    grid.appendChild(cell);
+  }
+}
+function updateStreak(){
+  let s=0;const d=new Date(today);
+  while(true){const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;if(doneDays.has(k)){s++;d.setDate(d.getDate()-1);}else break;}
+  document.getElementById('h-streak').textContent=s;
+  document.getElementById('home-streak').textContent=s;
+  const b=document.getElementById('h-badge');
+  b.textContent=s>=7?'🏆 Imparable':s>=3?'🔥 En racha':s>=1?'🌱 Empezando':'💤 Sin racha';
+}
+function changeCalMonth(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCal();}
+function initCalendar(){renderCal();}
+
+// HABITS
+function initHabits(){
+  const habits=[
+    {icon:'📵',title:'Dejar el celular en la estación Hábitos',desc:'Ponelo en el dock antes de meterte en la cama.',time:'21:00',done:true,src:null},
+    {icon:'🔆',title:'Encender la luz Hábitos',desc:'Luz ámbar cálida para leer sin afectar tu melatonina.',time:'21:00',done:true,src:null},
+    {icon:'📖',title:'Leer al menos 10 páginas',desc:'Reemplazá el scroll nocturno por una historia real.',time:'21:15',done:false,src:null},
+    {icon:'🌡️',title:'Bajar la temperatura a 16–19°C',desc:'El cuerpo necesita enfriarse para el sueño profundo.',time:'21:45',done:false,src:{label:'Sleep Foundation',url:'https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep'}},
+    {icon:'🌙',title:'Activar alarma en la pulsera',desc:'Ya está configurada. La pulsera te despierta suavemente.',time:'22:00',done:false,src:null},
+  ];
+  const hList=document.getElementById('habit-list');
+  habits.forEach(h=>{
+    const div=document.createElement('div');
+    div.className='habit-card'+(h.done?' done':'');
+    div.innerHTML=`<div class="habit-chk">${h.done?'✓':''}</div><div style="flex:1"><div class="habit-title">${h.icon} ${h.title}</div><div class="habit-desc">${h.desc}</div><div class="habit-time">${h.time}</div>${h.src?`<a class="habit-src" href="${h.src.url}" target="_blank" onclick="event.stopPropagation()"><span style="width:4px;height:4px;border-radius:50%;background:var(--amber);display:inline-block;margin-right:3px"></span>${h.src.label} ↗</a>`:''}</div>`;
+    div.onclick=()=>{div.classList.toggle('done');div.querySelector('.habit-chk').textContent=div.classList.contains('done')?'✓':'';};
+    hList.appendChild(div);
+  });
+}
+
+// HISTORY
+let histMonth=4,histYear=2026,histMode='score';
+function genData(m,y){
+  const days=new Date(y,m+1,0).getDate();
+  const isNow=m===today.getMonth()&&y===today.getFullYear();
+  const limit=isNow?today.getDate():days;
+  const data=[];let base=72;
+  for(let d=1;d<=limit;d++){base+=(Math.random()-0.4)*8;base=Math.max(45,Math.min(98,base));const h=5.5+Math.random()*3.5;const dp=h*(0.15+Math.random()*0.12);const rm=h*(0.18+Math.random()*0.1);data.push({day:d,score:Math.round(base),hours:parseFloat(h.toFixed(1)),deep:parseFloat(dp.toFixed(1)),rem:parseFloat(rm.toFixed(1))});}
+  return data;
+}
+let histData=genData(histMonth,histYear);
+function getColor(s){return s>=85?'#4CAF7D':s>=70?'#E8A94A':s>=55?'#C98B2A':'#E05A5A';}
+function getLbl(s){return s>=85?{t:'Excelente',bg:'rgba(76,175,125,0.15)',c:'#4CAF7D'}:s>=70?{t:'Bueno',bg:'rgba(232,169,74,0.15)',c:'#E8A94A'}:s>=55?{t:'Regular',bg:'rgba(232,169,74,0.1)',c:'#C98B2A'}:{t:'Mejorable',bg:'rgba(224,90,90,0.15)',c:'#E05A5A'};}
+function renderHist(){
+  const avgS=Math.round(histData.reduce((a,b)=>a+b.score,0)/histData.length);
+  const avgH=(histData.reduce((a,b)=>a+b.hours,0)/histData.length).toFixed(1);
+  const bestS=Math.max(...histData.map(d=>d.score));
+  const ritual=histData.filter(d=>d.score>=70).length;
+  const ms=[{icon:'💤',val:avgS,label:'Puntaje prom.',color:getColor(avgS),delta:avgS>=70?'↑ Buen mes':'↓ Mejorable',dc:avgS>=70?'#4CAF7D':'#E05A5A',bc:getColor(avgS)},{icon:'⏱️',val:avgH+'h',label:'Horas prom.',color:'#6B9EE8',delta:parseFloat(avgH)>=7?'✓ Ideal':'↓ Bajo',dc:parseFloat(avgH)>=7?'#4CAF7D':'#E05A5A',bc:'#6B9EE8'},{icon:'🏆',val:bestS,label:'Mejor noche',color:'#4CAF7D',delta:'Día '+histData.find(d=>d.score===bestS)?.day,dc:'#9A9490',bc:'#4CAF7D'},{icon:'🔥',val:ritual,label:'Con ritual',color:'#E8A94A',delta:'de '+histData.length+'n',dc:'#9A9490',bc:'#E8A94A'}];
+  document.getElementById('hist-metrics').innerHTML=ms.map(m=>`<div class="metric-card" style="border-top-color:${m.bc}"><div class="metric-icon">${m.icon}</div><div class="metric-val" style="color:${m.color}">${m.val}</div><div class="metric-lbl">${m.label}</div><div class="metric-delta" style="color:${m.dc}">${m.delta}</div></div>`).join('');
+  const bChart=document.getElementById('hist-bars');const xAxis=document.getElementById('hist-x');bChart.innerHTML='';xAxis.innerHTML='';
+  const vals=histMode==='score'?histData.map(d=>d.score):histData.map(d=>d.hours);
+  const maxV=histMode==='score'?100:10;
+  document.getElementById('hist-ref').textContent=histMode==='score'?'objetivo: 80':'objetivo: 7h';
+  vals.forEach((v,i)=>{const pct=(v/maxV)*100;const col=histMode==='score'?getColor(histData[i].score):'#6B9EE8';const c=document.createElement('div');c.className='b-col';c.innerHTML=`<div class="b-inner" style="height:${pct}%;background:${col};opacity:0.85"></div>`;bChart.appendChild(c);const l=document.createElement('div');l.className='chart-xl';l.textContent=(histData[i].day%7===0||histData[i].day===1)?histData[i].day:'';xAxis.appendChild(l);});
+  const buckets=[{label:'Excelente',min:85,c:'#4CAF7D'},{label:'Bueno',min:70,c:'#E8A94A'},{label:'Regular',min:55,c:'#C98B2A'},{label:'Mejorable',min:0,c:'#E05A5A'}];
+  const counts=buckets.map((b,i)=>{const next=buckets[i-1]?.min||101;return histData.filter(d=>d.score>=b.min&&d.score<next).length;});
+  const maxC=Math.max(...counts);
+  document.getElementById('hist-dist').innerHTML=buckets.map((b,i)=>`<div class="dist-row"><div class="dist-lbl" style="color:${b.c}">${b.label}</div><div class="dist-track"><div class="dist-fill" style="width:${maxC?counts[i]/maxC*100:0}%;background:${b.c}"></div></div><div class="dist-cnt">${counts[i]}n</div></div>`).join('');
+  const recent=[...histData].reverse().slice(0,12);
+  document.getElementById('hist-log').innerHTML=recent.map(d=>{const lbl=getLbl(d.score);const dW=(d.deep/d.hours)*100;const rW=(d.rem/d.hours)*100;const lW=100-dW-rW;return `<div class="night-row"><div class="night-date">${MONTHS[histMonth].slice(0,3)} ${d.day}</div><div class="night-bars"><div class="night-seg" style="width:${lW}%;height:13px;background:#3A3530;border-radius:2px 0 0 2px"></div><div class="night-seg" style="width:${dW}%;height:17px;background:#6B9EE8"></div><div class="night-seg" style="width:${rW}%;height:15px;background:#9B7EE8;border-radius:0 2px 2px 0"></div></div><div class="night-h">${d.hours}h</div><div class="night-sc" style="color:${getColor(d.score)}">${d.score}</div><div class="night-tag" style="background:${lbl.bg};color:${lbl.c}">${lbl.t}</div></div>`;}).join('');
+}
+function switchHistChart(mode,btn){histMode=mode;document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderHist();}
+function changeHistMonth(dir){histMonth+=dir;if(histMonth>11){histMonth=0;histYear++;}if(histMonth<0){histMonth=11;histYear--;}document.getElementById('hist-month').textContent=MONTHS[histMonth]+' '+histYear;histData=genData(histMonth,histYear);renderHist();}
+function initHistory(){renderHist();}
+
+// PROFILE
+function editName(){const el=document.getElementById('prof-name');if(el.contentEditable==='true')return;el.contentEditable='true';el.focus();el.onblur=()=>{el.contentEditable='false';const i=el.textContent.trim()[0]?.toUpperCase()||'H';document.getElementById('av-init').textContent=i;};el.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}};}
+function updateBed(el){const v=parseFloat(el.value);const h=Math.floor(v)%24;const m=v%1===0.5?'30':'00';document.getElementById('sl-b').textContent=String(h).padStart(2,'0')+':'+m;}
+</script>
+</body>
+</html>
